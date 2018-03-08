@@ -1,0 +1,34 @@
+apply plugin: 'java'
+apply plugin: 'org.junit.platform.gradle.plugin'
+
+group = 'de.tud.sep.mbi'
+version = '0.1-SNAPSHOT'
+
+buildscript {
+	repositories {
+	    mavenCentral()
+	}
+	dependencies {
+        classpath group: 'org.junit.platform', name: 'junit-platform-gradle-plugin', version: '1.0.3'
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+	compile (
+		[group: 'org.keycloak', name: 'keycloak-core', version: '3.4.3.Final'],
+		[group: 'org.keycloak', name: 'keycloak-server-spi', version: '3.4.3.Final'],
+		[group: 'org.keycloak', name: 'keycloak-server-spi-private', version: '3.4.3.Final'],
+		[group: 'org.keycloak', name: 'keycloak-services', version: '3.4.3.Final'],
+		[group: 'org.keycloak', name: 'keycloak-model-infinispan', version: '3.4.3.Final'],
+		[group: 'org.infinispan', name: 'infinispan-core', version: '9.2.0.CR2']
+	)
+	testCompile(
+    	[group: 'org.junit.jupiter', name:'junit-jupiter-api', version:'5.0.2'],
+    	[group: 'org.mockito', name: 'mockito-core', version: '2.12.0']
+	)
+    testRuntime group: 'org.junit.jupiter', name:'junit-jupiter-engine', version:'5.0.2'
+}

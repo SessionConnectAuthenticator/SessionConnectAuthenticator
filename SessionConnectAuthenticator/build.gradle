@@ -1,0 +1,26 @@
+apply plugin: 'java'
+
+group = 'de.tud.sep.mbi'
+version = '0.1-SNAPSHOT'
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+	compile(	
+		[group: 'org.keycloak', name: 'keycloak-core', version: '3.4.3.Final'],
+		[group: 'org.keycloak', name: 'keycloak-server-spi', version: '3.4.3.Final'],
+		[group: 'org.keycloak', name: 'keycloak-server-spi-private', version: '3.4.3.Final'],
+		[group: 'org.keycloak', name: 'keycloak-model-infinispan', version: '3.4.3.Final'],
+		[group: 'org.infinispan', name: 'infinispan-core', version: '9.1.4.Final'],		
+		[group: 'javax.ws.rs', name: 'javax.ws.rs-api', version: '2.1'],
+		[group: 'org.jboss.resteasy', name: 'resteasy-jaxrs', version: '2.3.3.Final']
+	)
+		testCompile(
+    	[group: 'org.junit.jupiter', name:'junit-jupiter-api', version:'5.0.2'],
+    	[group: 'org.mockito', name: 'mockito-core', version: '2.12.0']
+	)
+    testRuntime group: 'org.junit.jupiter', name:'junit-jupiter-engine', version:'5.0.2'
+}
+

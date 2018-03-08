@@ -1,0 +1,9 @@
+.gradle
+.kube
+.project
+
+.settings
+gradle
+lib
+ftl
+module

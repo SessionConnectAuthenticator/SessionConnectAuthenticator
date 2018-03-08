@@ -1,0 +1,46 @@
+language: java
+
+sudo: required
+
+services:
+  - docker
+
+jdk:
+  - oraclejdk8
+
+env:
+  #every line in this section will trigger a seperate build with the variables in that line, takes precedence over global variables
+  matrix:
+    - VERSION=0.13 AUTHENTICATOR_VERSION=0.1-SNAPSHOT WEBSERVICE_VERSION=0.1-SNAPSHOT IMAGE_NAME=registry.eu-de.bluemix.net/tud_mbi/keycloak:$VERSION
+  #here are varibles defined that are used in all builds
+  global:
+    #Variables that normally do not have to be changed
+    - DEPLOY=true
+    - ARTIFACT_ID=Keycloak
+    - DEPLOYMENT_ID=keycloak
+    - SERVICE_ID=$DEPLOYMENT_ID-service
+    - BUILD_DIR=build/libs
+    - AUTHENTICATOR=SessionConnectAuthenticator
+    - WEBSERVICE=SessionConnectWebservice
+
+install: 
+  # build the project with gradle, the additional options will enable debug logging (VERY verbose).
+  #- ./gradlew build #--info --debug --full-stacktrace -S
+  - cd SessionConnectAuthenticator
+  - gradle build -q
+  - cd ../SessionConnectWebservice
+  - gradle build -q
+  - cd ../$ARTIFACT_ID
+  - mkdir provider
+  - mkdir module
+  - cp ../$AUTHENTICATOR/$BUILD_DIR/$AUTHENTICATOR-$AUTHENTICATOR_VERSION.jar module/Authenticator.jar
+  - cp ../$WEBSERVICE/$BUILD_DIR/$WEBSERVICE-$WEBSERVICE_VERSION.jar module/Webservice.jar
+  - cp -r ../$AUTHENTICATOR/ftl ftl
+  # docker build
+  - sudo service docker restart
+  - sudo docker build -t $IMAGE_NAME .
+  
+script: 
+  # Deploy part put into a seperate script
+  - ./../deploy.sh
+
