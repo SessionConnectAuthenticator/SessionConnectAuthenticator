@@ -3,7 +3,6 @@ package de.tud.sep.mbi.sessionconnect.webservice;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -91,8 +90,6 @@ public class SessionConnectRealmResourceProvider implements RealmResourceProvide
 	 *         in the cache, 401, if the user is not logged in, or already was
 	 *         associated with some user.
 	 */
-	// TODO This should be a POST. For debugging via the browser, it needs to be
-	// GET.
 	@PUT
 	@Path(PATH)
 	public Response put(@PathParam(SESSION_ID_PARAMETER) String sessionId) {
@@ -104,19 +101,5 @@ public class SessionConnectRealmResourceProvider implements RealmResourceProvide
 			return Response.status(Status.BAD_REQUEST).build();
 		cache.put(uuid, user.getId(), CACHE_LIFETIME, TimeUnit.HOURS);
 		return Response.ok().build();
-	}
-
-	/**
-	 * This method may only be used for debug purposes! Do not compile this method
-	 * into the build! Retrieves the user id, mapped by a session id.
-	 *
-	 * @param sessionId
-	 *            The user id, the session id is mapped to.
-	 * @return The user id, the session id is mapped to.
-	 */
-	@GET
-	@Path("debug/{" + SESSION_ID_PARAMETER + "}")
-	public Response get(@PathParam(SESSION_ID_PARAMETER) String sessionId) {
-		return Response.ok(cache.get(UUID.fromString(sessionId))).build();
 	}
 }
